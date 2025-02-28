@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payin API Tester</title>
+</head>
+<body>
+    <h1>Payin API Tester</h1>
+    <button onclick="callPayinAPI()">Send Payin Request</button>
+    <h3>Response:</h3>
+    <pre id="response"></pre>
+    <h3>Extracted INTENT:</h3>
+    <pre id="intent"></pre>
+
+    <script>
+        async function callPayinAPI() {
+            try {
+                const response = await fetch("http://localhost:8080/api/payin", { // Update API URL
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "API-KEY": "9b433105a12f"
+                    },
+                    body: JSON.stringify({
+                        currency_name: "INR",
+                        amount: 50,
+                        mobile_no: "987636789",
+                        email: "user@mail.com",
+                        merchant_ref: "MO" + Date.now(),
+                        prod_desc: "NKIM",
+                        payin_type: "INTENT",
+                        name: "Shan",
+                        upi_id: ""
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+                document.getElementById("intent").innerText = data.INTENT || "No INTENT received";
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("response").innerText = "Failed to fetch API";
+            }
+        }
+    </script>
+</body>
+</html>
