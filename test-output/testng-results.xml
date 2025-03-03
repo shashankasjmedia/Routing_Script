@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-02-28T15:02:52 IST" name="Default suite" finished-at="2025-02-28T15:02:56 IST" duration-ms="3856">
+  <suite started-at="2025-03-03T11:30:26 IST" name="Default suite" finished-at="2025-03-03T11:30:28 IST" duration-ms="2483">
     <groups>
     </groups>
-    <test started-at="2025-02-28T15:02:52 IST" name="Default test" finished-at="2025-02-28T15:02:56 IST" duration-ms="3856">
+    <test started-at="2025-03-03T11:30:26 IST" name="Default test" finished-at="2025-03-03T11:30:28 IST" duration-ms="2483">
       <class name="Payin.Routing.Payin_OpenApi">
-        <test-method is-config="true" signature="beforeMethod()[pri:0, instance:Payin.Routing.Payin_OpenApi@7e07db1f]" started-at="2025-02-28T15:02:52 IST" name="beforeMethod" finished-at="2025-02-28T15:02:53 IST" duration-ms="438" status="PASS">
+        <test-method is-config="true" signature="beforeMethod()[pri:0, instance:Payin.Routing.Payin_OpenApi@2f7298b]" started-at="2025-03-03T11:30:26 IST" name="beforeMethod" finished-at="2025-03-03T11:30:26 IST" duration-ms="368" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeMethod -->
-        <test-method signature="Direct_Transfer()[pri:0, instance:Payin.Routing.Payin_OpenApi@7e07db1f]" started-at="2025-02-28T15:02:53 IST" name="Direct_Transfer" finished-at="2025-02-28T15:02:56 IST" duration-ms="3379" status="PASS">
+        <test-method signature="Direct_Transfer()[pri:0, instance:Payin.Routing.Payin_OpenApi@2f7298b]" started-at="2025-03-03T11:30:26 IST" name="Direct_Transfer" finished-at="2025-03-03T11:30:28 IST" duration-ms="2077" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Direct_Transfer -->

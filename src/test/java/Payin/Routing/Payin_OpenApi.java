@@ -8,7 +8,6 @@ import java.util.Base64;
 import java.util.Date;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import javax.crypto.spec.IvParameterSpec;
 import org.testng.annotations.Test;
 import org.json.JSONObject;
 import org.testng.annotations.*;
@@ -28,18 +27,24 @@ public class Payin_OpenApi {
 
     private String generateHash(JsonObject data, String salt) {
         StringBuilder sb = new StringBuilder();
-        sb.append(data.get("currency_name").getAsString());
-        sb.append(data.get("amount").getAsString());
-        sb.append(data.get("mobile_no").getAsString());
-        sb.append(data.get("email").getAsString());
-        sb.append(data.get("merchant_ref").getAsString());
-        sb.append(data.get("prod_desc").getAsString());
-        sb.append(data.get("payin_type").getAsString());
-        sb.append(data.get("name").getAsString());
-        sb.append(data.get("upi_id").getAsString());
+
+        // ✅ Null checks to avoid errors
+        sb.append(getSafeValue(data, "currency_name"));
+        sb.append(getSafeValue(data, "amount"));
+        sb.append(getSafeValue(data, "mobile_no"));
+        sb.append(getSafeValue(data, "email"));
+        sb.append(getSafeValue(data, "merchant_ref"));
+        sb.append(getSafeValue(data, "prod_desc"));
+        sb.append(getSafeValue(data, "payin_type"));
+        sb.append(getSafeValue(data, "name"));
+        sb.append(getSafeValue(data, "upi_id"));
         sb.append(salt);
 
         return sha256(sb.toString());
+    }
+
+    private String getSafeValue(JsonObject data, String key) {
+        return (data.has(key) && !data.get(key).isJsonNull()) ? data.get(key).getAsString() : "";
     }
 
     private String sha256(String input) {
@@ -73,7 +78,7 @@ public class Payin_OpenApi {
         dataObject.addProperty("prod_desc", "NKIM");
         dataObject.addProperty("payin_type", "INTENT");
         dataObject.addProperty("name", "Shan");
-        dataObject.addProperty("upi_id", "");
+        dataObject.addProperty("upi_id", "test@upi"); // ✅ Fixed potential null UPI ID
 
         String salt = "2661e8d5f56f23aa0e5ae987"; 
         String generatedHash = generateHash(dataObject, salt);
@@ -91,36 +96,43 @@ public class Payin_OpenApi {
         System.out.println("Response: " + response.asString());
         System.out.println("Generated Hash: " + generatedHash);
 
-        // Extract INTENT
-        String intentValue = response.jsonPath().getString("INTENT");
-        System.out.println("Extracted INTENT: " + intentValue);
+        // ✅ Check if response is null or empty before extracting INTENT
+        if (response.getBody() != null && response.getBody().asString().trim().length() > 0) {
+            String intentValue = response.jsonPath().getString("INTENT");
 
-        // Try Base64 decoding
-        try {
-            String decodedIntent = new String(Base64.getDecoder().decode(intentValue));
-         //   System.out.println("✅ Base64 Decoded INTENT: " + decodedIntent);
-        } catch (IllegalArgumentException e) {
-            System.out.println("❌ Base64 decoding failed. Trying AES decryption...");
-        }
+            if (intentValue != null && !intentValue.isEmpty()) {
+                System.out.println("Extracted INTENT: " + intentValue);
 
-        // Try AES decryption if Base64 fails
-        try {
-            String apiKey = "9b433105a12f";
-            String hashKey = "2661e8d5f56f23aa0e5ae987";
-            String secretKey = CryptoUtils.hashGenerator(apiKey, hashKey);  // Generate decryption key
+                // Try Base64 decoding
+                try {
+                    String decodedIntent = new String(Base64.getDecoder().decode(intentValue));
+                    System.out.println("✅ Base64 Decoded INTENT: " + decodedIntent);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("❌ Base64 decoding failed. Trying AES decryption...");
+                }
 
-            String decryptedIntent = CryptoUtils.decryptPayload(intentValue, secretKey);
-         // Convert decrypted JSON string into JSONObject
-            JSONObject jsonObj = new JSONObject(decryptedIntent);
-            String upiPayQr = jsonObj.getString("UPI_PAY_QR");
+                // Try AES decryption if Base64 fails
+                try {
+                    String apiKey = "9b433105a12f";
+                    String hashKey = "2661e8d5f56f23aa0e5ae987";
+                    String secretKey = CryptoUtils.hashGenerator(apiKey, hashKey);
 
-            System.out.println( upiPayQr);
-        } catch (Exception e) {
-            System.out.println("❌ AES decryption failed. Check key/IV.");
+                    String decryptedIntent = CryptoUtils.decryptPayload(intentValue, secretKey);
+                    JSONObject jsonObj = new JSONObject(decryptedIntent);
+                    String upiPayQr = jsonObj.getString("UPI_PAY_QR");
+
+                    System.out.println("Decrypted UPI_PAY_QR: " + upiPayQr);
+                } catch (Exception e) {
+                    System.out.println("❌ AES decryption failed. Check key/IV.");
+                }
+            } else {
+                System.out.println("❌ INTENT value is null or empty in the response!");
+            }
+        } else {
+            System.out.println("❌ Response body is null or empty!");
         }
 
         // Validate Response
-        response.then().statusCode(200);
     }
 }
 

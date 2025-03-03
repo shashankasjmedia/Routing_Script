@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-03-03T11:30:56 IST" name="Surefire suite" finished-at="2025-03-03T11:30:58 IST" duration-ms="2349">
+    <groups>
+    </groups>
+    <test started-at="2025-03-03T11:30:56 IST" name="Surefire test" finished-at="2025-03-03T11:30:58 IST" duration-ms="2349">
+      <class name="Payin.Routing.Payin_OpenApi">
+        <test-method is-config="true" signature="beforeMethod()[pri:0, instance:Payin.Routing.Payin_OpenApi@a4102b8]" started-at="2025-03-03T11:30:56 IST" name="beforeMethod" finished-at="2025-03-03T11:30:56 IST" duration-ms="360" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeMethod -->
+        <test-method signature="Direct_Transfer()[pri:0, instance:Payin.Routing.Payin_OpenApi@a4102b8]" started-at="2025-03-03T11:30:56 IST" name="Direct_Transfer" finished-at="2025-03-03T11:30:58 IST" duration-ms="1958" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Direct_Transfer -->
+      </class> <!-- Payin.Routing.Payin_OpenApi -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

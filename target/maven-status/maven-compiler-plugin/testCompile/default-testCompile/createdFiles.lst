@@ -1,2 +1,4 @@
-Payin\Routing\CryptoUtils.class
 Payin\Routing\Payin_OpenApi.class
+Payin\Routing\CryptoUtils.class
+Payin\Routing\Transaction.class
+Payin\Routing\HBY.class
